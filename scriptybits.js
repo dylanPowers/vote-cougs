@@ -30,17 +30,20 @@ function doVote() {
   }
 }
 
-var pd_callback = function(result) {
-  if (result["result"] === "registered") {
-    ++voteCount;
-    var hour = 1 * 60 * 60 * 1000;
-    timeOut(hour);
-  } else {
-    randomTimeOut();
-  }
+var pd_callback = function(resultString) {
+  var jsonR = JSON.parse(resultString);
+  if (jsonR["result"] !== "load") {
+    if (jsonR["result"] === "registered") {
+      ++voteCount;
+      var hour = 1 * 60 * 60 * 1000;
+      timeOut(hour);
+    } else {
+      randomTimeOut();
+    }
 
-  _$("message").textContent = voteCount + " successful votes made";
-  _$("last-attempt").textContent = "Last attempt made at " + new Date(Date.now());
+    _$("message").textContent = voteCount + " successful votes made";
+    _$("last-attempt").textContent = "Last attempt made at " + new Date(Date.now());
+  }
 }
 
 function timeOut(millis) {
