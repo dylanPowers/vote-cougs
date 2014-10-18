@@ -117,12 +117,19 @@ function pd_callback(resultString) {
 }
 
 function timeOut() {
-  var hourMillis = 1 * 60 * 60 * 1000;
+  var waitTime = 1 * 60 * 60 * 1000;
   var now = Date.now();
+
+  // There should technically always be a cookie
   var cookieTime = docCookies.getItem(PD_ck_name8374733 + "_" + PDV_version8374733);
+  // but if there isn't one, set the wait time to 5 minutes
+  if (!cookieTime) {
+    waitTime  = 5 * 60 * 1000;
+  }
+
   var startTime = parseInt(cookieTime || now);
-  var sleepTime = hourMillis - (now - startTime);
-  var date = new Date(startTime + hourMillis);
+  var sleepTime = waitTime - (now - startTime);
+  var date = new Date(startTime + waitTime);
   nextAttemptEl.textContent = "Next attempt at " + simplyTime(date);
   setTimeout(doVote, sleepTime);
 }
