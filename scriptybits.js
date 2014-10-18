@@ -47,9 +47,7 @@ var docCookies = {
 };
 
 
-// Switch to results view
-//PD_vote8374733(1);
-
+// Voting stuff
 var voteUrl = "http://static.polldaddy.com/p/8374733.js";
 var messageEl = _$("message");
 var lastAttemptEl = _$("last-attempt");
@@ -62,9 +60,8 @@ function doVote() {
   // Switch to vote view
   PDV_go8374733();
 
-  // Reset cookies
+  // Reset cookie check
   PD_ck8374733 = 0;
-  docCookies.removeItem(PD_ck_name8374733 + "_" + PDV_version8374733);
 
   isAutoVoteAttempt = true;
 
@@ -110,7 +107,8 @@ function pd_callback(resultString) {
 
 function timeOut() {
   var hourMillis = 1 * 60 * 60 * 1000;
-  var date = new Date(Date.now() + hourMillis);
+  var startTime = parseInt(docCookies.getItem(PD_ck_name8374733 + "_" + PDV_version8374733) || Date.now());
+  var date = new Date(startTime + hourMillis);
   nextAttemptEl.textContent = "Next attempt at " + simplyTime(date);
   setTimeout(doVote, hourMillis);
 }
