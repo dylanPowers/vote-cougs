@@ -118,10 +118,13 @@ function pd_callback(resultString) {
 
 function timeOut() {
   var hourMillis = 1 * 60 * 60 * 1000;
-  var startTime = parseInt(docCookies.getItem(PD_ck_name8374733 + "_" + PDV_version8374733) || Date.now());
+  var now = Date.now();
+  var cookieTime = docCookies.getItem(PD_ck_name8374733 + "_" + PDV_version8374733);
+  var startTime = parseInt(cookieTime || now);
+  var sleepTime = hourMillis - (now - startTime);
   var date = new Date(startTime + hourMillis);
   nextAttemptEl.textContent = "Next attempt at " + simplyTime(date);
-  setTimeout(doVote, hourMillis);
+  setTimeout(doVote, sleepTime);
 }
 
 function simplyTime(date) {
