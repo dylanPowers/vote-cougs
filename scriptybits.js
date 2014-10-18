@@ -1,3 +1,14 @@
+/*
+ All rights reserved Dylan K Powers (dylan.kyle.powers@gmail.com)
+
+ Permission granted for any use that directly benefits the
+ Washington State University Cougars. Such uses will be determined as valid,
+ that is they benefit the Washington State University Cougars, by
+ Dylan K Powers (dylan.kyle.powers@gmail.com)
+
+ Go Cougs!
+*/
+
 // Cookie parser
 // Source: developer.mozilla.org/en-US/docs/Web/API/document.cookie
 var docCookies = {
