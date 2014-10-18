@@ -4,6 +4,9 @@
 var voteCount = 0;
 
 var voteUrl = "http://static.polldaddy.com/p/8374733.js";
+var messageEl = _$("message");
+var lastAttemptEl = _$("last-attempt");
+var nextAttemptEl = _$("next-attempt");
 
 function doVote() {
   // Switch to vote view
@@ -20,13 +23,14 @@ function doVote() {
   }
 
   if (answer == "") {
-    _$("message").textContent = "Something broke :( Where's the WSU option?";
+    messageEl.textContent = "Something broke :( Where's the WSU option?";
+    lastAttemptEl = "";
+    nextAttemptEl = "";
   } else {
     _$("PDI_answer" + answer).checked = true;
     var blob = {pageX: 100, pageY: 100};
 
     PD_prevote8374733(blob);
-
   }
 }
 
@@ -41,12 +45,15 @@ var pd_callback = function(resultString) {
       randomTimeOut();
     }
 
-    _$("message").textContent = voteCount + " successful Coug votes made....Go Cougs!";
-    _$("last-attempt").textContent = "Last attempt made at " + new Date(Date.now());
+    messageEl.textContent = voteCount + " successful Coug votes made....Go Cougs!";
+    lastAttemptEl.textContent = "Last attempt made at " + simplyTime(new Date(Date.now()));
   }
 }
 
 function timeOut(millis) {
+  var date = new Date(Date.now() + millis)
+  nextAttemptEl.textContent = "Next attempt at " + simplyTime(date);
+                              ;
   setTimeout(doVote, millis);
 }
 
@@ -57,6 +64,9 @@ function randomTimeOut() {
   timeOut(millis);
 }
 
+function simplyTime(date) {
+  return date.toLocaleTimeString();
+}
 doVote();
 
 
