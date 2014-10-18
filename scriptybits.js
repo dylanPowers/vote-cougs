@@ -41,7 +41,7 @@ var pd_callback = function(resultString) {
       randomTimeOut();
     }
 
-    _$("message").textContent = voteCount + " successful votes made";
+    _$("message").textContent = voteCount + " successful Coug votes made....Go Cougs!";
     _$("last-attempt").textContent = "Last attempt made at " + new Date(Date.now());
   }
 }
