@@ -52,7 +52,7 @@ function timeOut(millis) {
 
 // Throw em off our tails
 function randomTimeOut() {
-  var rand5to15 = Math.random() * 10 + 5;
+  var rand5to15 = Math.random() * 5 + 5;
   var millis = rand5to15 * 60 * 1000;
   timeOut(millis);
 }
