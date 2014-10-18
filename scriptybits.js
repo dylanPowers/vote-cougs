@@ -8,6 +8,8 @@ var messageEl = _$("message");
 var lastAttemptEl = _$("last-attempt");
 var nextAttemptEl = _$("next-attempt");
 
+var isAutoVoteAttempt = false;
+
 function doVote() {
   // Switch to vote view
   PDV_go8374733();
@@ -15,6 +17,8 @@ function doVote() {
   // Reset cookies
   PD_ck8374733 = 0;
   docCookies.removeAll();
+
+  isAutoVoteAttempt = true;
 
   var POLL_ID = 8374733;
 
@@ -44,7 +48,11 @@ var pd_callback = function(resultString) {
     if (jsonR["result"] === "registered") {
       ++voteCount;
     }
-    timeOut();
+
+    // Prevent overly clicky people from screwing things up
+    if (isAutoVoteAttempt) {
+      timeOut();
+    }
 
     messageEl.textContent = voteCount + " successful Coug votes made....Go Cougs!";
     lastAttemptEl.textContent = "Last attempt made at " + simplyTime(new Date(Date.now()));
