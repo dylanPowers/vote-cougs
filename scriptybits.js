@@ -72,13 +72,6 @@ function simplyTime(date) {
   return date.toLocaleTimeString();
 }
 
-function removeCookie() {
-  //if (!this.hasItem(sKey)) { return false; }
-  sKey = PD_ck_name8374733;
-  document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-  //return true;
-}
-
 // Source: developer.mozilla.org/en-US/docs/Web/API/document.cookie
 var docCookies = {
   getItem: function (sKey) {
