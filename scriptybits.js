@@ -1,75 +1,4 @@
-// Switch to results view
-//PD_vote8374733(1);
-
-var voteCount = 0;
-
-var voteUrl = "http://static.polldaddy.com/p/8374733.js";
-var messageEl = _$("message");
-var lastAttemptEl = _$("last-attempt");
-var nextAttemptEl = _$("next-attempt");
-
-var isAutoVoteAttempt = false;
-
-function doVote() {
-  // Switch to vote view
-  PDV_go8374733();
-
-  // Reset cookies
-  PD_ck8374733 = 0;
-  docCookies.removeAll();
-
-  isAutoVoteAttempt = true;
-
-  var POLL_ID = 8374733;
-
-  var answerArr = window['PDV_A' + POLL_ID];
-  var answer = "";
-  for (var i = 0; i < answerArr.length; ++i) {
-    if (answerArr[i][1] === 'Washington State') {
-      answer = answerArr[1][0];
-    }
-  }
-
-  if (answer == "") {
-    messageEl.textContent = "Something broke :( Where's the WSU option?";
-    lastAttemptEl = "";
-    nextAttemptEl = "";
-  } else {
-    _$("PDI_answer" + answer).checked = true;
-    var blob = {pageX: 100, pageY: 100};
-
-    PD_prevote8374733(blob);
-  }
-}
-
-var pd_callback = function(resultString) {
-  var jsonR = JSON.parse(resultString);
-  if (jsonR["result"] !== "load") {
-    if (jsonR["result"] === "registered") {
-      ++voteCount;
-    }
-
-    // Prevent overly clicky people from screwing things up
-    if (isAutoVoteAttempt) {
-      timeOut();
-    }
-
-    messageEl.textContent = voteCount + " successful Coug votes made....Go Cougs!";
-    lastAttemptEl.textContent = "Last attempt made at " + simplyTime(new Date(Date.now()));
-  }
-}
-
-function timeOut() {
-  var hourMillis = 1 * 60 * 60 * 1000;
-  var date = new Date(Date.now() + hourMillis);
-  nextAttemptEl.textContent = "Next attempt at " + simplyTime(date);
-  setTimeout(doVote, hourMillis);
-}
-
-function simplyTime(date) {
-  return date.toLocaleTimeString();
-}
-
+// Cookie parser
 // Source: developer.mozilla.org/en-US/docs/Web/API/document.cookie
 var docCookies = {
   getItem: function (sKey) {
@@ -96,9 +25,9 @@ var docCookies = {
     return true;
   },
   removeItem: function (sKey, sPath, sDomain) {
-    //if (!this.hasItem(sKey)) { return false; }
+    if (!this.hasItem(sKey)) { return false; }
     document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
-    //return true;
+    return true;
   },
   removeAll: function() {
     var outSide = this;
@@ -116,6 +45,79 @@ var docCookies = {
     return aKeys;
   }
 };
+
+
+// Switch to results view
+//PD_vote8374733(1);
+
+var voteUrl = "http://static.polldaddy.com/p/8374733.js";
+var messageEl = _$("message");
+var lastAttemptEl = _$("last-attempt");
+var nextAttemptEl = _$("next-attempt");
+
+var isAutoVoteAttempt = false;
+var voteCount = parseInt(docCookies.getItem('vote-count') || 0);
+
+function doVote() {
+  // Switch to vote view
+  PDV_go8374733();
+
+  // Reset cookies
+  PD_ck8374733 = 0;
+  docCookies.removeItem(PD_ck_name8374733 + "_" + PDV_version8374733);
+
+  isAutoVoteAttempt = true;
+
+  var POLL_ID = 8374733;
+
+  var answerArr = window['PDV_A' + POLL_ID];
+  var answer = "";
+  for (var i = 0; i < answerArr.length; ++i) {
+    if (answerArr[i][1] === 'Washington State') {
+      answer = answerArr[1][0];
+    }
+  }
+
+  if (answer == "") {
+    messageEl.textContent = "Something broke :( Where's the WSU option?";
+    lastAttemptEl = "";
+    nextAttemptEl = "";
+  } else {
+    _$("PDI_answer" + answer).checked = true;
+    var blob = {pageX: 100, pageY: 100};
+
+    PD_prevote8374733(blob);
+  }
+}
+
+function pd_callback(resultString) {
+  var jsonR = JSON.parse(resultString);
+  if (jsonR["result"] !== "load") {
+    if (jsonR["result"] === "registered") {
+      ++voteCount;
+      docCookies.setItem('vote-count', voteCount, Infinity);
+    }
+
+    // Prevent overly clicky people from screwing things up
+    if (isAutoVoteAttempt) {
+      timeOut();
+    }
+
+    messageEl.textContent = voteCount + " successful Coug votes made....Go Cougs!";
+    lastAttemptEl.textContent = "Last attempt made at " + simplyTime(new Date(Date.now()));
+  }
+}
+
+function timeOut() {
+  var hourMillis = 1 * 60 * 60 * 1000;
+  var date = new Date(Date.now() + hourMillis);
+  nextAttemptEl.textContent = "Next attempt at " + simplyTime(date);
+  setTimeout(doVote, hourMillis);
+}
+
+function simplyTime(date) {
+  return date.toLocaleTimeString();
+}
 
 doVote();
 
