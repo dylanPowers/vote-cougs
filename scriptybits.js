@@ -43,29 +43,19 @@ var pd_callback = function(resultString) {
   if (jsonR["result"] !== "load") {
     if (jsonR["result"] === "registered") {
       ++voteCount;
-      var hour = 1 * 60 * 60 * 1000;
-      timeOut(hour);
-    } else {
-      randomTimeOut();
     }
+    timeOut();
 
     messageEl.textContent = voteCount + " successful Coug votes made....Go Cougs!";
     lastAttemptEl.textContent = "Last attempt made at " + simplyTime(new Date(Date.now()));
   }
 }
 
-function timeOut(millis) {
-  var date = new Date(Date.now() + millis)
+function timeOut() {
+  var hourMillis = 1 * 60 * 60 * 1000;
+  var date = new Date(Date.now() + hourMillis);
   nextAttemptEl.textContent = "Next attempt at " + simplyTime(date);
-                              ;
-  setTimeout(doVote, millis);
-}
-
-// Throw em off our tails
-function randomTimeOut() {
-  var rand5to15 = Math.random() * 5 + 5;
-  var millis = rand5to15 * 60 * 1000;
-  timeOut(millis);
+  setTimeout(doVote, hourMillis);
 }
 
 function simplyTime(date) {
@@ -98,9 +88,9 @@ var docCookies = {
     return true;
   },
   removeItem: function (sKey, sPath, sDomain) {
-    if (!this.hasItem(sKey)) { return false; }
+    //if (!this.hasItem(sKey)) { return false; }
     document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
-    return true;
+    //return true;
   },
   removeAll: function() {
     var outSide = this;
