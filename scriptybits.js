@@ -104,6 +104,7 @@ function pd_callback(resultString) {
     if (jsonR["result"] === "registered") {
       ++voteCount;
       docCookies.setItem('vote-count', voteCount, Infinity);
+      lastAttemptEl.textContent = "Last successful vote at " + simplyTime(new Date(Date.now()));
     }
 
     // Prevent overly clicky people from screwing things up
@@ -112,12 +113,11 @@ function pd_callback(resultString) {
     }
 
     messageEl.textContent = voteCount + " successful Coug votes made....Go Cougs!";
-    lastAttemptEl.textContent = "Last attempt made at " + simplyTime(new Date(Date.now()));
   }
 }
 
 function timeOut() {
-  var waitTime = 1 * 60 * 60 * 1000;
+  var waitTime = 1 * 60 * 60 * 1000 + 30 * 1000;
   var now = Date.now();
 
   // There should technically always be a cookie
