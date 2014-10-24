@@ -20,7 +20,7 @@ page.onError = function(msg, trace) {
 
 };
 
-page.open('http://localhost:8000/index.html', function(status) {
+page.open('file://' + fs.workingDirectory + '/index.html', function(status) {
   console.log('Status: ' + status);  
   var fan = phantom;
   page.evaluate(function() {    
