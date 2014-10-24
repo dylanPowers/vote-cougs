@@ -111,11 +111,13 @@ function pd_callback(resultString) {
       console.log('New successful vote! Count: ' + voteCount);
       docCookies.setItem('vote-count', voteCount, Infinity);
       lastAttemptEl.textContent = "Last successful vote at " + simplyTime(new Date(Date.now()));
+      scriptyDone(true);
     } else {
       console.log('Unsuccessful vote...darn!');
       window.ga('send', 'event', 'vote', 'attempt', 'fail', 1);
+      scriptyDone(false);
     }
-    
+
     window.ga('send', 'event', 'vote', 'attempt', 'total', voteCount);
 
     // Prevent overly clicky people from screwing things up
@@ -126,6 +128,8 @@ function pd_callback(resultString) {
     messageEl.textContent = voteCount + " successful Coug votes made....Go Cougs!";
   }
 }
+
+var scriptyDone = function(success) {}
 
 function timeOut() {
   var waitTime = 1 * 60 * 60 * 1000 + 30 * 1000;
