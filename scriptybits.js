@@ -107,11 +107,14 @@ function pd_callback(resultString) {
   if (jsonR["result"] !== "load") {
     if (jsonR["result"] === "registered") {
       ++voteCount;
+      window.ga('send', 'event', 'vote', 'attempt', 'success', 1);
+      window.ga('send', 'event', 'vote', 'attempt', 'total', voteCount);
       console.log('New successful vote! Count: ' + voteCount);
       docCookies.setItem('vote-count', voteCount, Infinity);
       lastAttemptEl.textContent = "Last successful vote at " + simplyTime(new Date(Date.now()));
     } else {
       console.log('Unsuccessful vote...darn!');
+      window.ga('send', 'event', 'vote', 'attempt', 'fail', 1);
     }
 
     // Prevent overly clicky people from screwing things up
