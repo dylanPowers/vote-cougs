@@ -68,6 +68,8 @@ var isAutoVoteAttempt = false;
 var voteCount = parseInt(docCookies.getItem('vote-count') || 0);
 
 function doVote() {
+  console.log('Doing vote!....');  
+
   // Switch to vote view
   PDV_go8374733();
 
@@ -87,24 +89,29 @@ function doVote() {
   }
 
   if (answer == "") {
-    messageEl.textContent = "Something broke :( Where's the WSU option?";
+    var errMsg = "Something broke :( Where's the WSU option?";
+    messageEl.textContent = errMsg;
+    console.log(errMsg);
     lastAttemptEl = "";
     nextAttemptEl = "";
   } else {
     _$("PDI_answer" + answer).checked = true;
     var blob = {pageX: 100, pageY: 100};
-
     PD_prevote8374733(blob);
   }
 }
 
 function pd_callback(resultString) {
+  console.log('Callback with: ' + resultString);
   var jsonR = JSON.parse(resultString);
   if (jsonR["result"] !== "load") {
     if (jsonR["result"] === "registered") {
       ++voteCount;
+      console.log('New successful vote! Count: ' + voteCount);
       docCookies.setItem('vote-count', voteCount, Infinity);
       lastAttemptEl.textContent = "Last successful vote at " + simplyTime(new Date(Date.now()));
+    } else {
+      console.log('Unsuccessful vote...darn!');
     }
 
     // Prevent overly clicky people from screwing things up
@@ -131,6 +138,7 @@ function timeOut() {
   var sleepTime = waitTime - (now - startTime);
   var date = new Date(startTime + waitTime);
   nextAttemptEl.textContent = "Next attempt at " + simplyTime(date);
+  console.log('Next attempt at ' + simplyTime(date));
   setTimeout(doVote, sleepTime);
 }
 

@@ -1,0 +1,1 @@
+phantomjs --web-security=false --ssl-protocol=tlsv1 phantombits.js
